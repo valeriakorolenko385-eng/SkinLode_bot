@@ -2,16 +2,11 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
 from openai import OpenAI
-import pytesseract
-from PIL import Image
 import base64
 import random
 import json
 import os
 import time
-
-# путь к tesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # AI
 client = OpenAI(
@@ -229,33 +224,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ========================
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    user_id = str(update.effective_user.id)
-    user = users.get(user_id, {})
-
-    await update.message.reply_text("Сейчас посмотрю 👀")
-
-    photo = update.message.photo[-1]
-    file = await photo.get_file()
-    await file.download_to_drive("photo.jpg")
-
-    with open("photo.jpg", "rb") as image_file:
-        base64_image = base64.b64encode(image_file.read()).decode("utf-8")
-
-    content = [
-        {"type": "text", "text": "Что это за косметический продукт?"},
-        {
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_image}"
-            }
-        }
-    ]
-
-    analysis = await analyze_ingredients(content, user)
-
-    await update.message.reply_text(f"{user.get('name','')},\n\n{analysis}")
-
-
+    await update.message.reply_text(
+        "Пока что я не умею разбирать фото 😅\n\n"
+        "Но ты можешь прислать состав текстом или название продукта 💗"
+    )
 # ========================
 # ❗️ ОШИБКИ
 # ========================
